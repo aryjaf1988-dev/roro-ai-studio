@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -19,6 +18,7 @@ main{max-width:850px;margin:auto;padding:18px}
 .card h2{font-size:18px;margin:10px 0}
 button{border:0;border-radius:10px;background:#7661ef;color:white;padding:12px;font-size:15px;cursor:pointer}
 button:active{opacity:.8}
+button:disabled{opacity:.6;cursor:wait}
 textarea,input,select{width:100%;background:#0c1222;color:white;border:1px solid #38435e;border-radius:10px;padding:12px;margin:8px 0;font-size:16px}
 textarea{min-height:120px;resize:vertical}
 .panel{margin-top:18px;background:#141b2d;border:1px solid #303b57;border-radius:16px;padding:16px}
@@ -36,7 +36,7 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 <main>
 <div class="status">
 <strong>👋 أهلاً بك في استوديوك</strong>
-<p>هذه نسخة أولية تعمل على المتصفح. أدوات توليد الصور والفيديو والصوت تحتاج لاحقاً إلى ربط خدمات ذكاء اصطناعي حقيقية.</p>
+<p>يمكنك استخدام Gemini لتوليد النصوص والأفكار. توليد الصور والفيديو والصوت يحتاج لاحقاً إلى ربط خدمات مناسبة لهذه المهام.</p>
 </div>
 
 <div class="grid">
@@ -70,9 +70,10 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 <h2 id="toolTitle">الأداة</h2>
 <p id="toolDescription"></p>
 <textarea id="idea" placeholder="اكتب فكرتك هنا..."></textarea>
-<button onclick="makeDraft()">إنشاء مسودة</button>
+<button id="generateButton" onclick="makeDraft()">إنشاء مسودة</button>
+<p id="message" role="status" aria-live="polite"></p>
 <div id="output" class="hidden">
-<h3>المسودة</h3>
+<h3>النتيجة</h3>
 <div id="result"></div>
 <button onclick="copyDraft()">نسخ النص</button>
 </div>
@@ -82,10 +83,10 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 <script>
 let currentTool='story';
 const tools={
-story:['📚 كاتب القصص','اكتب فكرة القصة، الشخصيات، والمكان. سأجهز لك قالباً أولياً لتنظيم فكرتك.'],
-image:['🎨 استوديو الصور','صف الشخصيات والمكان والإضاءة والأسلوب الذي تريده في الصورة.'],
-video:['🎬 استوديو الفيديو','اكتب المشهد وحركة الشخصيات وزاوية الكاميرا ومدة اللقطة.'],
-voice:['🎙️ استوديو الصوت','اكتب النص الذي تريد تجهيزه للتعليق الصوتي وحدد نبرة الراوي.']
+story:['📚 كاتب القصص','اكتب فكرة القصة، الشخصيات، والمكان. سأستخدم الذكاء الاصطناعي لتطويرها إلى قصة.'],
+image:['🎨 استوديو الصور','صف الشخصيات والمكان والإضاءة والأسلوب. سيجهّز الذكاء الاصطناعي وصفاً مفصلاً للصورة، وليس ملف صورة فعلياً.'],
+video:['🎬 استوديو الفيديو','اكتب المشهد وحركة الشخصيات وزاوية الكاميرا ومدة اللقطة. سيجهّز الذكاء الاصطناعي وصفاً للمشهد، وليس فيديو فعلياً.'],
+voice:['🎙️ استوديو الصوت','اكتب النص وحدد نبرة الراوي. سيجهّز الذكاء الاصطناعي نصاً للتعليق الصوتي، وليس ملفاً صوتياً فعلياً.']
 };
 function openTool(name){
 currentTool=name;
@@ -93,26 +94,47 @@ document.getElementById('toolTitle').textContent=tools[name][0];
 document.getElementById('toolDescription').textContent=tools[name][1];
 document.getElementById('idea').value='';
 document.getElementById('output').classList.add('hidden');
+document.getElementById('message').textContent='';
 document.getElementById('tool').classList.remove('hidden');
 document.getElementById('tool').scrollIntoView({behavior:'smooth'});
 }
-function makeDraft(){
+async function makeDraft(){
 const idea=document.getElementById('idea').value.trim();
+const button=document.getElementById('generateButton');
+const message=document.getElementById('message');
+const resultBox=document.getElementById('result');
 if(!idea){alert('اكتب فكرتك أولاً');return;}
-const labels={
-story:'فكرة القصة:',
-image:'وصف الصورة المطلوب:',
-video:'وصف مشهد الفيديو:',
-voice:'نص التعليق الصوتي:'
-};
-const result=labels[currentTool]+'\n'+idea+
-'\n\nملاحظات للتطوير:\n- حدّد التفاصيل التي تريد الحفاظ عليها.\n- أضف الأسلوب والجو العام والنتيجة المطلوبة.\n\nهذه مسودة تنظيمية فقط وليست ناتجاً مولّداً بالذكاء الاصطناعي.';
-document.getElementById('result').textContent=result;
+button.disabled=true;
+button.textContent='جارٍ الاتصال بـ Gemini...';
+message.textContent='لحظة من فضلك، جارٍ إنشاء المحتوى.';
+document.getElementById('output').classList.add('hidden');
+try{
+const response=await fetch('/api/generate',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({idea:idea,tool:currentTool})
+});
+let data={};
+try{data=await response.json();}catch(e){}
+if(!response.ok){
+throw new Error(data.error || ('فشل الطلب. رمز الخطأ: '+response.status));
+}
+if(!data.text || !String(data.text).trim()){
+throw new Error('وصل رد فارغ من Gemini. جرّب مرة أخرى.');
+}
+resultBox.textContent=data.text;
 document.getElementById('output').classList.remove('hidden');
+message.textContent='تم إنشاء المحتوى بواسطة Gemini.';
+}catch(error){
+message.textContent='تعذّر إنشاء المحتوى: '+(error.message || 'خطأ غير معروف')+' — تأكد من إعدادات الخادم ثم أعد المحاولة.';
+}finally{
+button.disabled=false;
+button.textContent='إنشاء مسودة';
+}
 }
 async function copyDraft(){
 const text=document.getElementById('result').textContent;
-try{await navigator.clipboard.writeText(text);alert('تم نسخ المسودة');}
+try{await navigator.clipboard.writeText(text);alert('تم نسخ النص');}
 catch(e){alert('يمكنك تحديد النص ونسخه يدوياً');}
 }
 openTool('story');
