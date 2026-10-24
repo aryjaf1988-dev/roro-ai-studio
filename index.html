@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Studio | استوديو الذكاء الاصطناعي</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#f4f5fb;font-family:Arial,sans-serif}
+header{padding:24px 18px;background:linear-gradient(135deg,#18294b,#42266a);border-bottom:1px solid #394263}
+h1{margin:0 0 10px;font-size:27px}
+p{line-height:1.8;color:#c1c9df}
+main{max-width:850px;margin:auto;padding:18px}
+.status{background:#17243a;border:1px solid #344a68;border-radius:14px;padding:14px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:#141b2d;border:1px solid #303b57;border-radius:16px;padding:16px}
+.card .emoji{font-size:30px}
+.card h2{font-size:18px;margin:10px 0}
+button{border:0;border-radius:10px;background:#7661ef;color:white;padding:12px;font-size:15px;cursor:pointer}
+button:active{opacity:.8}
+textarea,input,select{width:100%;background:#0c1222;color:white;border:1px solid #38435e;border-radius:10px;padding:12px;margin:8px 0;font-size:16px}
+textarea{min-height:120px;resize:vertical}
+.panel{margin-top:18px;background:#141b2d;border:1px solid #303b57;border-radius:16px;padding:16px}
+.hidden{display:none}
+#result{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
+footer{text-align:center;padding:25px;color:#8f9bb5}
+@media(max-width:420px){.grid{grid-template-columns:1fr}h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+<h1>✨ AI Studio</h1>
+<p>استوديوك الإبداعي — قصص، صور، فيديو وصوت في مكان واحد.</p>
+</header>
+<main>
+<div class="status">
+<strong>👋 أهلاً بك في استوديوك</strong>
+<p>هذه نسخة أولية تعمل على المتصفح. أدوات توليد الصور والفيديو والصوت تحتاج لاحقاً إلى ربط خدمات ذكاء اصطناعي حقيقية.</p>
+</div>
+
+<div class="grid">
+<div class="card">
+<div class="emoji">📚</div>
+<h2>كاتب القصص</h2>
+<p>اكتب فكرة وحوّلها إلى مسودة قصة.</p>
+<button onclick="openTool('story')">افتح الكاتب</button>
+</div>
+<div class="card">
+<div class="emoji">🎨</div>
+<h2>استوديو الصور</h2>
+<p>جهّز وصفاً لصورة تريد إنشاءها.</p>
+<button onclick="openTool('image')">جهّز وصف صورة</button>
+</div>
+<div class="card">
+<div class="emoji">🎬</div>
+<h2>استوديو الفيديو</h2>
+<p>حضّر فكرة مشهد فيديو.</p>
+<button onclick="openTool('video')">جهّز مشهداً</button>
+</div>
+<div class="card">
+<div class="emoji">🎙️</div>
+<h2>استوديو الصوت</h2>
+<p>جهّز نصاً للتعليق الصوتي.</p>
+<button onclick="openTool('voice')">افتح استوديو الصوت</button>
+</div>
+</div>
+
+<section id="tool" class="panel hidden">
+<h2 id="toolTitle">الأداة</h2>
+<p id="toolDescription"></p>
+<textarea id="idea" placeholder="اكتب فكرتك هنا..."></textarea>
+<button onclick="makeDraft()">إنشاء مسودة</button>
+<div id="output" class="hidden">
+<h3>المسودة</h3>
+<div id="result"></div>
+<button onclick="copyDraft()">نسخ النص</button>
+</div>
+</section>
+</main>
+<footer>AI Studio • نسخة تجريبية أولية</footer>
+<script>
+let currentTool='story';
+const tools={
+story:['📚 كاتب القصص','اكتب فكرة القصة، الشخصيات، والمكان. سأجهز لك قالباً أولياً لتنظيم فكرتك.'],
+image:['🎨 استوديو الصور','صف الشخصيات والمكان والإضاءة والأسلوب الذي تريده في الصورة.'],
+video:['🎬 استوديو الفيديو','اكتب المشهد وحركة الشخصيات وزاوية الكاميرا ومدة اللقطة.'],
+voice:['🎙️ استوديو الصوت','اكتب النص الذي تريد تجهيزه للتعليق الصوتي وحدد نبرة الراوي.']
+};
+function openTool(name){
+currentTool=name;
+document.getElementById('toolTitle').textContent=tools[name][0];
+document.getElementById('toolDescription').textContent=tools[name][1];
+document.getElementById('idea').value='';
+document.getElementById('output').classList.add('hidden');
+document.getElementById('tool').classList.remove('hidden');
+document.getElementById('tool').scrollIntoView({behavior:'smooth'});
+}
+function makeDraft(){
+const idea=document.getElementById('idea').value.trim();
+if(!idea){alert('اكتب فكرتك أولاً');return;}
+const labels={
+story:'فكرة القصة:',
+image:'وصف الصورة المطلوب:',
+video:'وصف مشهد الفيديو:',
+voice:'نص التعليق الصوتي:'
+};
+const result=labels[currentTool]+'\n'+idea+
+'\n\nملاحظات للتطوير:\n- حدّد التفاصيل التي تريد الحفاظ عليها.\n- أضف الأسلوب والجو العام والنتيجة المطلوبة.\n\nهذه مسودة تنظيمية فقط وليست ناتجاً مولّداً بالذكاء الاصطناعي.';
+document.getElementById('result').textContent=result;
+document.getElementById('output').classList.remove('hidden');
+}
+async function copyDraft(){
+const text=document.getElementById('result').textContent;
+try{await navigator.clipboard.writeText(text);alert('تم نسخ المسودة');}
+catch(e){alert('يمكنك تحديد النص ونسخه يدوياً');}
+}
+openTool('story');
+</script>
+</body>
+</html>
