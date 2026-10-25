@@ -117,7 +117,15 @@ body:JSON.stringify({idea:idea,tool:currentTool})
 let data={};
 try{data=await response.json();}catch(e){}
 if(!response.ok){
-throw new Error(data.error || ('فشل الطلب. رمز الخطأ: '+response.status));
+  const detail = data.details
+    ? ' | التفاصيل: ' + data.details
+    : '';
+
+  throw new Error(
+    (data.error || 'فشل الطلب') +
+    ' (HTTP ' + response.status + ')' +
+    detail
+  );
 }
 if(!data.text || !String(data.text).trim()){
 throw new Error('وصل رد فارغ من Gemini. جرّب مرة أخرى.');
