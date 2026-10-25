@@ -76,6 +76,7 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 <h3>النتيجة</h3>
 <div id="result"></div>
 <button onclick="copyDraft()">نسخ النص</button>
+<button onclick="speakDraft()">🔊 استمع إلى النص</button>
 </div>
 </section>
 </main>
@@ -144,6 +145,18 @@ async function copyDraft(){
 const text=document.getElementById('result').textContent;
 try{await navigator.clipboard.writeText(text);alert('تم نسخ النص');}
 catch(e){alert('يمكنك تحديد النص ونسخه يدوياً');}
+}
+function speakDraft(){
+  const text = document.getElementById('result').textContent;
+  if (!text.trim()) {
+    alert('أنشئ النص أولاً');
+    return;
+  }
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = 'ar';
+  speech.rate = 1;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(speech);
 }
 openTool('story');
 </script>
