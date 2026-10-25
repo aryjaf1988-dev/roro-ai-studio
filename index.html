@@ -77,6 +77,8 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 <div id="result"></div>
 <button onclick="copyDraft()">نسخ النص</button>
 <button onclick="speakDraft()">🔊 استمع إلى النص</button>
+<button onclick="pauseSpeech()">⏸️ توقف مؤقت</button>
+<button onclick="resumeSpeech()">▶️ متابعة الصوت</button>
 </div>
 </section>
 </main>
@@ -158,7 +160,14 @@ function speakDraft(){
   speechSynthesis.cancel();
   speechSynthesis.speak(speech);
 }
-openTool('story');
+function pauseSpeech(){
+  speechSynthesis.pause();
+}
+
+function resumeSpeech(){
+  speechSynthesis.resume();
+}
+  openTool('story');
 </script>
 </body>
 </html>
