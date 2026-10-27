@@ -149,24 +149,28 @@ try{await navigator.clipboard.writeText(text);alert('تم نسخ النص');}
 catch(e){alert('يمكنك تحديد النص ونسخه يدوياً');}
 }
 
+
 let currentSpeech = null;
+let speechText = '';
+let speechPaused = false;
 
 function speakDraft() {
-  const text = document.getElementById('result').textContent;
+  speechText = document.getElementById('result').textContent;
 
-  if (!text.trim()) {
+  if (!speechText.trim()) {
     alert('أنشئ النص أولاً');
     return;
   }
 
   window.speechSynthesis.cancel();
 
-  currentSpeech = new SpeechSynthesisUtterance(text);
+  currentSpeech = new SpeechSynthesisUtterance(speechText);
   currentSpeech.lang = 'ar';
   currentSpeech.rate = 1;
+  speechPaused = false;
 
   currentSpeech.onend = function() {
-    currentSpeech = null;
+    speechPaused = false;
   };
 
   window.speechSynthesis.speak(currentSpeech);
@@ -174,22 +178,22 @@ function speakDraft() {
 
 function pauseSpeech() {
   if (window.speechSynthesis.speaking) {
+    speechPaused = true;
     window.speechSynthesis.pause();
   }
 }
 
-
 function resumeSpeech() {
-  if (window.speechSynthesis.paused) {
-    window.speechSynthesis.resume();
-  } else if (
-    window.speechSynthesis.speaking &&
-    currentSpeech
-  ) {
+  if (speechPaused && speechText) {
     window.speechSynthesis.cancel();
+    currentSpeech = new SpeechSynthesisUtterance(speechText);
+    currentSpeech.lang = 'ar';
+    currentSpeech.rate = 1;
+    speechPaused = false;
     window.speechSynthesis.speak(currentSpeech);
   }
 }
+
 
 
   openTool('story');
