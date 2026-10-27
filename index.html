@@ -148,25 +148,42 @@ const text=document.getElementById('result').textContent;
 try{await navigator.clipboard.writeText(text);alert('تم نسخ النص');}
 catch(e){alert('يمكنك تحديد النص ونسخه يدوياً');}
 }
-function speakDraft(){
+
+let currentSpeech = null;
+
+function speakDraft() {
   const text = document.getElementById('result').textContent;
+
   if (!text.trim()) {
     alert('أنشئ النص أولاً');
     return;
   }
-  const speech = new SpeechSynthesisUtterance(text);
-  speech.lang = 'ar';
-  speech.rate = 1;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(speech);
-}
-function pauseSpeech(){
-  speechSynthesis.pause();
+
+  window.speechSynthesis.cancel();
+
+  currentSpeech = new SpeechSynthesisUtterance(text);
+  currentSpeech.lang = 'ar';
+  currentSpeech.rate = 1;
+
+  currentSpeech.onend = function() {
+    currentSpeech = null;
+  };
+
+  window.speechSynthesis.speak(currentSpeech);
 }
 
-function resumeSpeech(){
-  speechSynthesis.resume();
+function pauseSpeech() {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.pause();
+  }
 }
+
+function resumeSpeech() {
+  if (window.speechSynthesis.paused) {
+    window.speechSynthesis.resume();
+  }
+}
+
   openTool('story');
 </script>
 </body>
