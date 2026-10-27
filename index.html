@@ -25,287 +25,324 @@ textarea{min-height:120px;resize:vertical}
 .hidden{display:none}
 #result{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
 footer{text-align:center;padding:25px;color:#8f9bb5}
-@media(max-width:420px){.grid{grid-template-columns:1fr}h1{font-size:23px}}
 
-.audio-studio {
-  margin-top: 20px;
-  padding: 20px;
-  background: #080808;
-  border: 1px solid #292929;
-  border-radius: 24px;
-  color: #fff;
-  text-align: center;
+.audio-studio{
+  margin-top:20px;
+  padding:20px;
+  background:#080808;
+  border:1px solid #292929;
+  border-radius:24px;
+  color:#fff;
+  text-align:center;
 }
-
-.audio-studio h3 {
-  margin: 0 0 18px;
-  font-size: 24px;
+.audio-studio h3{margin:0 0 18px;font-size:24px}
+.audio-studio button{
+  border-radius:18px;
+  padding:18px 12px;
+  font-size:17px;
+  color:#fff;
+  cursor:pointer;
+  min-height:76px;
 }
-
-.audio-studio button {
-  border-radius: 18px;
-  padding: 18px 12px;
-  font-size: 17px;
-  color: white;
-  cursor: pointer;
-  min-height: 76px;
+.audio-studio .audio-play{
+  display:block;
+  width:100%;
+  min-height:110px;
+  background:#7050e8;
+  border:none;
+  margin:0 0 12px;
 }
-
-.audio-studio .audio-play {
-  width: 100%;
-  min-height: 110px;
-  background: #7050e8;
-  border: none;
-  margin-bottom: 12px;
+.audio-controls{display:flex;gap:12px}
+.audio-studio .audio-secondary{
+  flex:1;
+  background:#080808;
+  border:1px solid #292929;
 }
-
-.audio-controls {
-  display: flex;
-  gap: 12px;
+.audio-studio .audio-copy{
+  display:block;
+  width:100%;
+  min-height:60px;
+  margin-top:12px;
+  padding:18px 20px;
+  background:#7050e8;
+  border:none;
+  border-radius:18px;
 }
-
-.audio-studio .audio-secondary {
-  flex: 1;
-  background: #080808;
-  border: 1px solid #292929;
-}
-.audio-studio .audio-copy {
-  display: block;
-  width: 100%;
-  min-height: 60px;
-  margin-top: 12px;
-  padding: 18px 20px;
-  background: #7050e8;
-  border: none;
-  border-radius: 18px;
-}
-
-.audio-studio .audio-play {
-  display: block;
-  width: 100%;
-  min-height: 110px;
-  background: #7050e8;
-  border: none;
-  border-radius: 18px;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.audio-studio .audio-top {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 12px;
+#audioStatus{font-size:14px;margin:10px 0 0;color:#bfc5d8}
+@media(max-width:420px){
+  .grid{grid-template-columns:1fr}
+  h1{font-size:23px}
+  main{padding:14px}
+  .audio-studio{padding:16px}
+  .audio-controls{gap:10px}
+  .audio-studio button{font-size:16px;padding:15px 8px}
 }
 </style>
 </head>
 <body>
 <header>
-<h1>✨ نبض رورو AI</h1>
-<p>استوديوك الإبداعي — قصص، صور، فيديو وصوت في مكان واحد.</p>
+  <h1>✨ نبض رورو AI</h1>
+  <p>استوديوك الإبداعي — قصص، صور، فيديو وصوت في مكان واحد.</p>
 </header>
+
 <main>
-<div class="status">
-<strong>👋 أهلاً بك في استوديوك</strong>
-<p>يمكنك استخدام Gemini لتوليد النصوص والأفكار. توليد الصور والفيديو والصوت يحتاج لاحقاً إلى ربط خدمات مناسبة لهذه المهام.</p>
-</div>
-
-<div class="grid">
-<div class="card">
-<div class="emoji">📚</div>
-<h2>كاتب القصص</h2>
-<p>اكتب فكرة وحوّلها إلى مسودة قصة.</p>
-<button onclick="openTool('story')">افتح الكاتب</button>
-</div>
-<div class="card">
-<div class="emoji">🎨</div>
-<h2>استوديو الصور</h2>
-<p>جهّز وصفاً لصورة تريد إنشاءها.</p>
-<button onclick="openTool('image')">جهّز وصف صورة</button>
-</div>
-<div class="card">
-<div class="emoji">🎬</div>
-<h2>استوديو الفيديو</h2>
-<p>حضّر فكرة مشهد فيديو.</p>
-<button onclick="openTool('video')">جهّز مشهداً</button>
-</div>
-<div class="card">
-<div class="emoji">🎙️</div>
-<h2>استوديو الصوت</h2>
-<p>جهّز نصاً للتعليق الصوتي.</p>
-<button onclick="openTool('voice')">افتح استوديو الصوت</button>
-</div>
-</div>
-
-<section id="tool" class="panel hidden">
-<h2 id="toolTitle">الأداة</h2>
-<p id="toolDescription"></p>
-<textarea id="idea" placeholder="اكتب فكرتك هنا..."></textarea>
-<button id="generateButton" onclick="makeDraft()">إنشاء مسودة</button>
-<p id="message" role="status" aria-live="polite"></p>
-<div id="output" class="hidden">
-<h3>النتيجة</h3>
-<div id="result"></div>
-
-<div class="audio-studio">
-  <h3>🎙️ استوديو الصوت</h3>
-
-  <button class="audio-play" onclick="speakDraft()">
-    ▷<br>استمع إلى النص
-  </button>
-
-  <div class="audio-controls">
-    <button class="audio-secondary" onclick="resumeSpeech()">
-      ▶ متابعة الصوت
-    </button>
-    <button class="audio-secondary" onclick="pauseSpeech()">
-      ⏸ توقف مؤقت
-    </button>
+  <div class="status">
+    <strong>👋 أهلاً بك في استوديوك</strong>
+    <p>يمكنك استخدام Gemini لتوليد النصوص والأفكار. توليد الصور والفيديو والصوت يحتاج لاحقاً إلى ربط خدمات مناسبة لهذه المهام.</p>
   </div>
 
-  <button class="audio-copy" onclick="copyDraft()">
-    📋 نسخ النص
-  </button>
-</div>
+  <div class="grid">
+    <div class="card">
+      <div class="emoji">📚</div>
+      <h2>كاتب القصص</h2>
+      <p>اكتب فكرة وحوّلها إلى مسودة قصة.</p>
+      <button onclick="openTool('story')">افتح الكاتب</button>
+    </div>
+    <div class="card">
+      <div class="emoji">🎨</div>
+      <h2>استوديو الصور</h2>
+      <p>جهّز وصفاً لصورة تريد إنشاءها.</p>
+      <button onclick="openTool('image')">جهّز وصف صورة</button>
+    </div>
+    <div class="card">
+      <div class="emoji">🎬</div>
+      <h2>استوديو الفيديو</h2>
+      <p>حضّر فكرة مشهد فيديو.</p>
+      <button onclick="openTool('video')">جهّز مشهداً</button>
+    </div>
+    <div class="card">
+      <div class="emoji">🎙️</div>
+      <h2>استوديو الصوت</h2>
+      <p>جهّز نصاً للتعليق الصوتي.</p>
+      <button onclick="openTool('voice')">افتح استوديو الصوت</button>
+    </div>
+  </div>
 
-</div>
-</section>
+  <section id="tool" class="panel hidden">
+    <h2 id="toolTitle">الأداة</h2>
+    <p id="toolDescription"></p>
+    <textarea id="idea" placeholder="اكتب فكرتك هنا..."></textarea>
+    <button id="generateButton" onclick="makeDraft()">إنشاء مسودة</button>
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <div id="output" class="hidden">
+      <h3>النتيجة</h3>
+      <div id="result"></div>
+
+      <div class="audio-studio">
+        <h3>🎙️ استوديو الصوت</h3>
+        <button class="audio-play" onclick="speakDraft()">▷<br>استمع إلى النص</button>
+        <div class="audio-controls">
+          <button class="audio-secondary" onclick="resumeSpeech()">▶ متابعة الصوت</button>
+          <button class="audio-secondary" onclick="pauseSpeech()">⏸ توقف مؤقت</button>
+        </div>
+        <button class="audio-copy" onclick="copyDraft()">📋 نسخ النص</button>
+        <p id="audioStatus" aria-live="polite">اضغط «استمع إلى النص» لبدء القراءة.</p>
+      </div>
+    </div>
+  </section>
 </main>
+
 <footer>AI Studio • نسخة تجريبية أولية</footer>
+
 <script>
-let currentTool='story';
-const tools={
-story:['📚 كاتب القصص','اكتب فكرة القصة، الشخصيات، والمكان. سأستخدم الذكاء الاصطناعي لتطويرها إلى قصة.'],
-image:['🎨 استوديو الصور','صف الشخصيات والمكان والإضاءة والأسلوب. سيجهّز الذكاء الاصطناعي وصفاً مفصلاً للصورة، وليس ملف صورة فعلياً.'],
-video:['🎬 استوديو الفيديو','اكتب المشهد وحركة الشخصيات وزاوية الكاميرا ومدة اللقطة. سيجهّز الذكاء الاصطناعي وصفاً للمشهد، وليس فيديو فعلياً.'],
-voice:['🎙️ استوديو الصوت','اكتب النص وحدد نبرة الراوي. سيجهّز الذكاء الاصطناعي نصاً للتعليق الصوتي، وليس ملفاً صوتياً فعلياً.']
+let currentTool = 'story';
+
+const tools = {
+  story: ['📚 كاتب القصص', 'اكتب فكرة القصة، الشخصيات، والمكان. سأستخدم الذكاء الاصطناعي لتطويرها إلى قصة.'],
+  image: ['🎨 استوديو الصور', 'صف الشخصيات والمكان والإضاءة والأسلوب. سيجهّز الذكاء الاصطناعي وصفاً مفصلاً للصورة، وليس ملف صورة فعلياً.'],
+  video: ['🎬 استوديو الفيديو', 'اكتب المشهد وحركة الشخصيات وزاوية الكاميرا ومدة اللقطة. سيجهّز الذكاء الاصطناعي وصفاً للمشهد، وليس فيديو فعلياً.'],
+  voice: ['🎙️ استوديو الصوت', 'اكتب النص وحدد نبرة الراوي. سيجهّز الذكاء الاصطناعي نصاً للتعليق الصوتي، وليس ملفاً صوتياً فعلياً.']
 };
-function openTool(name){
-currentTool=name;
-document.getElementById('toolTitle').textContent=tools[name][0];
-document.getElementById('toolDescription').textContent=tools[name][1];
-document.getElementById('idea').value='';
-document.getElementById('output').classList.add('hidden');
-document.getElementById('message').textContent='';
-document.getElementById('tool').classList.remove('hidden');
-document.getElementById('tool').scrollIntoView({behavior:'smooth'});
-}
-async function makeDraft(){
-const idea=document.getElementById('idea').value.trim();
-const button=document.getElementById('generateButton');
-const message=document.getElementById('message');
-const resultBox=document.getElementById('result');
-if(!idea){alert('اكتب فكرتك أولاً');return;}
-button.disabled=true;
-button.textContent='جارٍ الاتصال بـ Gemini...';
-message.textContent='لحظة من فضلك، جارٍ إنشاء المحتوى.';
-document.getElementById('output').classList.add('hidden');
-try{
-const response=await fetch('/api/generate',{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({idea:idea,tool:currentTool})
-});
-let data={};
-try{data=await response.json();}catch(e){}
-if(!response.ok){
-  const detail = data.details
-    ? ' | التفاصيل: ' + data.details
-    : '';
 
-  throw new Error(
-    (data.error || 'فشل الطلب') +
-    ' (HTTP ' + response.status + ')' +
-    detail
-  );
-}
-if(!data.text || !String(data.text).trim()){
-throw new Error('وصل رد فارغ من Gemini. جرّب مرة أخرى.');
-}
-resultBox.textContent=data.text;
-document.getElementById('output').classList.remove('hidden');
-message.textContent='تم إنشاء المحتوى بواسطة Gemini.';
-}catch(error){
-message.textContent='تعذّر إنشاء المحتوى: '+(error.message || 'خطأ غير معروف')+' — تأكد من إعدادات الخادم ثم أعد المحاولة.';
-}finally{
-button.disabled=false;
-button.textContent='إنشاء مسودة';
-}
-}
-async function copyDraft(){
-const text=document.getElementById('result').textContent;
-try{await navigator.clipboard.writeText(text);alert('تم نسخ النص');}
-catch(e){alert('يمكنك تحديد النص ونسخه يدوياً');}
+function openTool(name) {
+  stopSpeechAndReset();
+  currentTool = name;
+  document.getElementById('toolTitle').textContent = tools[name][0];
+  document.getElementById('toolDescription').textContent = tools[name][1];
+  document.getElementById('idea').value = '';
+  document.getElementById('output').classList.add('hidden');
+  document.getElementById('message').textContent = '';
+  document.getElementById('tool').classList.remove('hidden');
+  document.getElementById('tool').scrollIntoView({behavior: 'smooth'});
 }
 
-let currentSpeech = null;
-let speechText = '';
-let speechPaused = false;
-let speechPosition = 0;
+async function makeDraft() {
+  const idea = document.getElementById('idea').value.trim();
+  const button = document.getElementById('generateButton');
+  const message = document.getElementById('message');
+  const resultBox = document.getElementById('result');
 
-function speakFromPosition() {
-  const startPosition = speechPosition;
-  const remainingText = speechText.slice(startPosition);
-
-  if (!remainingText) {
-    speechPaused = false;
-    speechPosition = 0;
+  if (!idea) {
+    alert('اكتب فكرتك أولاً');
     return;
   }
 
-  currentSpeech = new SpeechSynthesisUtterance(remainingText);
-  currentSpeech.lang = 'ar';
-  currentSpeech.rate = 1;
+  button.disabled = true;
+  button.textContent = 'جارٍ الاتصال بـ Gemini...';
+  message.textContent = 'لحظة من فضلك، جارٍ إنشاء المحتوى.';
+  document.getElementById('output').classList.add('hidden');
+  stopSpeechAndReset();
 
-  currentSpeech.onboundary = function(event) {
-    if (typeof event.charIndex === 'number') {
-      speechPosition = startPosition + event.charIndex;
+  try {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({idea: idea, tool: currentTool})
+    });
+
+    let data = {};
+    try { data = await response.json(); } catch (e) {}
+
+    if (!response.ok) {
+      const detail = data.details ? ' | التفاصيل: ' + data.details : '';
+      throw new Error((data.error || 'فشل الطلب') + ' (HTTP ' + response.status + ')' + detail);
     }
+
+    if (!data.text || !String(data.text).trim()) {
+      throw new Error('وصل رد فارغ من Gemini. جرّب مرة أخرى.');
+    }
+
+    resultBox.textContent = data.text;
+    document.getElementById('output').classList.remove('hidden');
+    document.getElementById('audioStatus').textContent = 'اضغط «استمع إلى النص» لبدء القراءة.';
+    message.textContent = 'تم إنشاء المحتوى بواسطة Gemini.';
+  } catch (error) {
+    message.textContent = 'تعذّر إنشاء المحتوى: ' + (error.message || 'خطأ غير معروف') + ' — تأكد من إعدادات الخادم ثم أعد المحاولة.';
+  } finally {
+    button.disabled = false;
+    button.textContent = 'إنشاء مسودة';
+  }
+}
+
+async function copyDraft() {
+  const text = document.getElementById('result').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('تم نسخ النص');
+  } catch (e) {
+    alert('يمكنك تحديد النص ونسخه يدوياً');
+  }
+}
+
+/*
+ * Android browsers may cancel a speech utterance when pause/resume is used.
+ * To make resuming more reliable, the text is split into short chunks.
+ * Pause keeps the current chunk index; resume restarts only that short chunk,
+ * rather than restarting the entire text.
+ */
+let speechChunks = [];
+let speechChunkIndex = 0;
+let speechPaused = false;
+let currentSpeech = null;
+let speechRunId = 0;
+
+function makeSpeechChunks(text) {
+  const words = text.match(/\S+/g) || [];
+  const chunks = [];
+  const wordsPerChunk = 7;
+
+  for (let i = 0; i < words.length; i += wordsPerChunk) {
+    chunks.push(words.slice(i, i + wordsPerChunk).join(' '));
+  }
+  return chunks;
+}
+
+function speakCurrentChunk(runId) {
+  if (runId !== speechRunId || speechPaused) return;
+
+  if (speechChunkIndex >= speechChunks.length) {
+    speechPaused = false;
+    currentSpeech = null;
+    document.getElementById('audioStatus').textContent = 'انتهت قراءة النص.';
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(speechChunks[speechChunkIndex]);
+  currentSpeech = utterance;
+  utterance.lang = 'ar';
+  utterance.rate = 1;
+
+  utterance.onend = function() {
+    if (runId !== speechRunId || speechPaused) return;
+    speechChunkIndex += 1;
+    speakCurrentChunk(runId);
   };
 
-  currentSpeech.onend = function() {
-    if (!speechPaused) {
-      speechPosition = 0;
-      currentSpeech = null;
-    }
+  utterance.onerror = function(event) {
+    if (runId !== speechRunId || speechPaused) return;
+    document.getElementById('audioStatus').textContent =
+      'حدث خطأ أثناء تشغيل الصوت. جرّب بدء القراءة من جديد.';
   };
 
-  window.speechSynthesis.speak(currentSpeech);
+  window.speechSynthesis.speak(utterance);
 }
 
 function speakDraft() {
-  speechText = document.getElementById('result').textContent;
+  const text = document.getElementById('result').textContent.trim();
 
-  if (!speechText.trim()) {
+  if (!text) {
     alert('أنشئ النص أولاً');
     return;
   }
 
   window.speechSynthesis.cancel();
-  speechPosition = 0;
+  speechRunId += 1;
+  speechChunks = makeSpeechChunks(text);
+  speechChunkIndex = 0;
   speechPaused = false;
 
-  speakFromPosition();
+  document.getElementById('audioStatus').textContent = 'جارٍ تشغيل الصوت...';
+  speakCurrentChunk(speechRunId);
 }
 
 function pauseSpeech() {
-  if (window.speechSynthesis.speaking &&
-      !window.speechSynthesis.paused) {
+  if (!speechChunks.length || speechChunkIndex >= speechChunks.length) {
+    document.getElementById('audioStatus').textContent = 'ابدأ تشغيل النص أولاً.';
+    return;
+  }
+
+  if (!speechPaused) {
     speechPaused = true;
-    window.speechSynthesis.pause();
+    speechRunId += 1;
     window.speechSynthesis.cancel();
+    currentSpeech = null;
+    document.getElementById('audioStatus').textContent =
+      'توقف الصوت مؤقتاً. المتابعة تبدأ من المقطع الحالي.';
   }
 }
 
 function resumeSpeech() {
-  if (speechPaused && speechText) {
+  if (!speechChunks.length) {
+    document.getElementById('audioStatus').textContent = 'ابدأ تشغيل النص أولاً.';
+    return;
+  }
+
+  if (speechPaused) {
     speechPaused = false;
-    speakFromPosition();
+    speechRunId += 1;
+    document.getElementById('audioStatus').textContent = 'جارٍ متابعة الصوت...';
+    speakCurrentChunk(speechRunId);
+  } else if (!currentSpeech && speechChunkIndex < speechChunks.length) {
+    speechRunId += 1;
+    document.getElementById('audioStatus').textContent = 'جارٍ متابعة الصوت...';
+    speakCurrentChunk(speechRunId);
   }
 }
 
+function stopSpeechAndReset() {
+  speechRunId += 1;
+  window.speechSynthesis.cancel();
+  speechChunks = [];
+  speechChunkIndex = 0;
+  speechPaused = false;
+  currentSpeech = null;
 
-  openTool('story');
+  const status = document.getElementById('audioStatus');
+  if (status) status.textContent = 'اضغط «استمع إلى النص» لبدء القراءة.';
+}
+
+openTool('story');
 </script>
 </body>
 </html>
