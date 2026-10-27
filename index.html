@@ -26,6 +26,58 @@ textarea{min-height:120px;resize:vertical}
 #result{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
 footer{text-align:center;padding:25px;color:#8f9bb5}
 @media(max-width:420px){.grid{grid-template-columns:1fr}h1{font-size:23px}}
+
+.audio-studio {
+  margin-top: 20px;
+  padding: 20px;
+  background: #080808;
+  border: 1px solid #292929;
+  border-radius: 24px;
+  color: #fff;
+  text-align: center;
+}
+
+.audio-studio h3 {
+  margin: 0 0 18px;
+  font-size: 24px;
+}
+
+.audio-studio button {
+  border-radius: 18px;
+  padding: 18px 12px;
+  font-size: 17px;
+  color: white;
+  cursor: pointer;
+  min-height: 76px;
+}
+
+.audio-studio .audio-play {
+  width: 100%;
+  min-height: 110px;
+  background: #7050e8;
+  border: none;
+  margin-bottom: 12px;
+}
+
+.audio-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.audio-studio .audio-secondary {
+  flex: 1;
+  background: #080808;
+  border: 1px solid #292929;
+}
+
+.audio-studio .audio-copy {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 12px;
+  background: #7050e8;
+  border: none;
+}
+
 </style>
 </head>
 <body>
@@ -75,10 +127,17 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 <div id="output" class="hidden">
 <h3>النتيجة</h3>
 <div id="result"></div>
-<button onclick="copyDraft()">نسخ النص</button>
-<button onclick="speakDraft()">🔊 استمع إلى النص</button>
-<button onclick="pauseSpeech()">⏸️ توقف مؤقت</button>
-<button onclick="resumeSpeech()">▶️ متابعة الصوت</button>
+
+<div class="audio-studio">
+  <h3>🎙️ استوديو الصوت</h3>
+  <button class="audio-play" onclick="speakDraft()">🔊 استمع إلى النص</button>
+  <div class="audio-controls">
+    <button class="audio-secondary" onclick="pauseSpeech()">⏸️ توقف مؤقت</button>
+    <button class="audio-secondary" onclick="resumeSpeech()">▶️ متابعة الصوت</button>
+  </div>
+  <button class="audio-copy" onclick="copyDraft()">📋 نسخ النص</button>
+</div>
+
 </div>
 </section>
 </main>
