@@ -70,13 +70,29 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
   border: 1px solid #292929;
 }
 
+
 .audio-studio .audio-copy {
-  width: 100%;
+  width: auto;
   min-height: 52px;
-  margin-top: 12px;
-  background: #7050e8;
-  border: none;
+  margin-top: 0;
+  padding: 18px 20px;
+  background: #080808;
+  border: 1px solid #292929;
+  border-radius: 18px;
 }
+
+.audio-studio .audio-play {
+  width: auto;
+  flex: 1;
+}
+
+.audio-studio .audio-top {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 
 </style>
 </head>
@@ -130,12 +146,16 @@ footer{text-align:center;padding:25px;color:#8f9bb5}
 
 <div class="audio-studio">
   <h3>🎙️ استوديو الصوت</h3>
+  
+<div class="audio-top">
   <button class="audio-play" onclick="speakDraft()">🔊 استمع إلى النص</button>
-  <div class="audio-controls">
-    <button class="audio-secondary" onclick="pauseSpeech()">⏸️ توقف مؤقت</button>
-    <button class="audio-secondary" onclick="resumeSpeech()">▶️ متابعة الصوت</button>
-  </div>
   <button class="audio-copy" onclick="copyDraft()">📋 نسخ النص</button>
+</div>
+<div class="audio-controls">
+  <button class="audio-secondary" onclick="pauseSpeech()">⏸️ توقف مؤقت</button>
+  <button class="audio-secondary" onclick="resumeSpeech()">▶️ متابعة الصوت</button>
+</div>
+
 </div>
 
 </div>
