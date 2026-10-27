@@ -178,11 +178,19 @@ function pauseSpeech() {
   }
 }
 
+
 function resumeSpeech() {
   if (window.speechSynthesis.paused) {
     window.speechSynthesis.resume();
+  } else if (
+    window.speechSynthesis.speaking &&
+    currentSpeech
+  ) {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(currentSpeech);
   }
 }
+
 
   openTool('story');
 </script>
