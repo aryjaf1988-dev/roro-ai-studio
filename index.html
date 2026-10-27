@@ -272,18 +272,13 @@ function pauseSpeech() {
   }
 }
 
+
 function resumeSpeech() {
-  if (speechPaused && speechText) {
-    window.speechSynthesis.cancel();
-    currentSpeech = new SpeechSynthesisUtterance(speechText);
-    currentSpeech.lang = 'ar';
-    currentSpeech.rate = 1;
+  if (speechPaused && currentSpeech) {
+    window.speechSynthesis.resume();
     speechPaused = false;
-    window.speechSynthesis.speak(currentSpeech);
   }
 }
-
-
 
   openTool('story');
 </script>
